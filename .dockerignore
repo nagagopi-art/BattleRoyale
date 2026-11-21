@@ -1,0 +1,12 @@
+.git
+.backend-git-backup
+**/node_modules
+**/.env
+**/.env.*
+!**/.env.example
+**/*.log
+backend/archive
+backend/tests
+mobile-app
+unity-client
+documentation

@@ -4,10 +4,9 @@
 services:
   - type: web
     name: indian-battle-fields
-    runtime: node
-    rootDir: backend
-    buildCommand: npm ci
-    startCommand: npm start
+    # Docker build from the repository root (backend + frontend).
+    runtime: docker
+    dockerfilePath: ./Dockerfile
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
