@@ -34,7 +34,7 @@
   const msg = document.getElementById("msg");
   let saved = "";
   try { saved = localStorage.getItem("ibf.server") || ""; } catch (e) {}
-  input.value = saved || "192.168.0.10:5000";
+  input.value = saved || "https://battleroyale-6jha.onrender.com";
 
   function normalise(v) {
     v = v.trim().replace(/\/+$/, "");
