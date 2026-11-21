@@ -1,0 +1,25 @@
+# Render blueprint: one web service running the game backend,
+# which also serves the 3D game at /play/3d.html.
+# Secrets marked sync: false are entered in the Render dashboard.
+services:
+  - type: web
+    name: indian-battle-fields
+    runtime: node
+    rootDir: backend
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SECRET_KEY
+        sync: false
+      - key: SUPABASE_PUBLISHABLE_KEY
+        sync: false
+      # Your Render address, e.g. https://indian-battle-fields.onrender.com
+      - key: CLIENT_URL
+        sync: false
+      - key: AUTO_CONFIRM_EMAIL
+        value: "true"

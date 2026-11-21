@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Indian Battle Fields</title>
+<style>
+  html, body { margin: 0; height: 100%; background: radial-gradient(circle at 70% 80%, #4a2412, #05070c 70%); color: #fff; font: 15px system-ui, sans-serif; }
+  body { display: flex; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box; }
+  .card { width: min(420px, 100%); padding: 22px; background: rgba(9, 13, 21, .75); border: 1px solid rgba(255, 200, 97, .35); border-radius: 14px; }
+  h1 { margin: 0 0 4px; font: 900 26px Impact, "Arial Black", sans-serif; letter-spacing: 1px;
+       background: linear-gradient(180deg, #ff9933 0 33%, #fff 33% 66%, #2dbb4a 66%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  p { color: #b9c2cf; margin: 6px 0 14px; }
+  input { width: 100%; box-sizing: border-box; padding: 12px; font-size: 16px; border-radius: 8px; border: 1px solid #2d3644; background: #0f141b; color: #fff; }
+  button { width: 100%; margin-top: 12px; padding: 13px; font: 800 17px system-ui; border: 0; border-radius: 8px; background: linear-gradient(180deg, #ffb24d, #e8711c); color: #1b0e02; }
+  #msg { min-height: 20px; color: #ff9a8f; margin-top: 10px; font-size: 13px; }
+  small { color: #8b97a8; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>INDIAN BATTLE FIELDS</h1>
+    <p>Game server address</p>
+    <input id="addr" inputmode="url" autocomplete="off" placeholder="your-game.onrender.com">
+    <button id="go">PLAY</button>
+    <div id="msg"></div>
+    <small>Online: your Render address, e.g. https://indian-battle-fields.onrender.com
+      (the first start after a quiet period can take up to a minute).<br>
+      At home: your PC's "Network:" address, e.g. 192.168.0.10:5000 (same Wi-Fi).</small>
+  </div>
+<script>
+  // The app remembers the last server and opens the 3D game from it.
+  const input = document.getElementById("addr");
+  const msg = document.getElementById("msg");
+  let saved = "";
+  try { saved = localStorage.getItem("ibf.server") || ""; } catch (e) {}
+  input.value = saved || "192.168.0.10:5000";
+
+  function normalise(v) {
+    v = v.trim().replace(/\/+$/, "");
+    if (!v) return "";
+    if (!/^https?:\/\//i.test(v)) v = "http://" + v;
+    return v.replace(/\/play\/3d\.html$/i, "");
+  }
+
+  async function play() {
+    const base = normalise(input.value);
+    if (!base) { msg.textContent = "Enter the server address."; return; }
+    msg.style.color = "#b9c2cf";
+    msg.textContent = "Connecting…";
+    try {
+      const ctrl = new AbortController();
+      setTimeout(() => ctrl.abort(), 70000);
+      // no-cors: only checks the server answers (works with any CORS setting).
+      await fetch(base + "/api/health", { signal: ctrl.signal, cache: "no-store", mode: "no-cors" });
+      try { localStorage.setItem("ibf.server", input.value.trim()); } catch (e) {}
+      location.href = base + "/play/3d.html";
+    } catch (e) {
+      msg.style.color = "#ff9a8f";
+      msg.textContent = "Cannot reach the server. Is it running, on the same Wi-Fi, and allowed through the firewall?";
+    }
+  }
+  document.getElementById("go").addEventListener("click", play);
+  input.addEventListener("keydown", e => { if (e.key === "Enter") play(); });
+</script>
+</body>
+</html>

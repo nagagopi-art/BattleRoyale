@@ -1,0 +1,17 @@
+{
+  "name": "indian-battle-fields-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Android app shell for Indian Battle Fields (loads the game from the game server).",
+  "scripts": {
+    "sync": "cap sync android",
+    "apk": "cap sync android && cd android && gradlew.bat assembleDebug"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.2.3",
+    "@capacitor/core": "^6.2.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.2.3"
+  }
+}

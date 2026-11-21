@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Secrets: never commit these (set them in the Render dashboard instead)
+.env
+.env.*
+!.env.example
+
+# Android build output (rebuild with mobile-app/README.md)
+mobile-app/android/.gradle/
+mobile-app/android/build/
+mobile-app/android/app/build/
+mobile-app/android/local.properties
+mobile-app/*.apk
+mobile-app/build.log
+
+# Logs, OS and editor files
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Old backend-only git folder (kept as a backup)
+.backend-git-backup/

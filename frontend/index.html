@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link rel="icon" href="img/logo.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Indian Battle Fields — Test Client</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<section id="screen-auth" class="screen panel-screen">
+    <div class="panel">
+        <img class="key-art" src="img/key-art.jpg" alt="Indian Battle Fields: Battle Royale"
+             onload="this.nextElementSibling.classList.add('title-hidden')" onerror="this.remove()">
+        <h1>INDIAN BATTLE FIELDS</h1>
+        <p class="sub">Test client</p>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="login">Log in</button>
+            <button class="tab" data-tab="register">Sign up</button>
+        </div>
+
+        <form id="form-login" class="form">
+            <input name="email" type="email" placeholder="Email" required autocomplete="email">
+            <input name="password" type="password" placeholder="Password" required autocomplete="current-password">
+            <button type="submit" class="primary">Log in</button>
+        </form>
+
+        <form id="form-register" class="form hidden">
+            <input name="username" placeholder="Username (3-20 letters, numbers, _)" required>
+            <input name="email" type="email" placeholder="Email" required autocomplete="email">
+            <input name="password" type="password" placeholder="Password (8+ characters)" required autocomplete="new-password">
+            <button type="submit" class="primary">Create account</button>
+        </form>
+
+        <p id="auth-message" class="message"></p>
+    </div>
+</section>
+
+<!-- ============ LOBBY ============ -->
+<section id="screen-lobby" class="screen panel-screen hidden">
+    <div class="panel wide">
+        <div class="row between">
+            <h2>Lobby</h2>
+            <div>
+                <span id="lobby-user" class="muted"></span>
+                <button id="btn-logout" class="small">Log out</button>
+            </div>
+        </div>
+
+        <div id="lobby-profile" class="muted"></div>
+
+        <h3>Game mode</h3>
+        <div class="row mode-pick" id="mode-pick">
+            <button data-type="br">Battle Royale</button>
+            <button data-type="cs">Clash Squad</button>
+            <button data-type="tdm">Team Deathmatch</button>
+        </div>
+        <p id="mode-desc" class="hint"></p>
+
+        <h3>Quick match</h3>
+        <div class="row">
+            <button class="primary" data-quick="solo">Solo</button>
+            <button class="primary" data-quick="duo">Duo</button>
+            <button class="primary" data-quick="squad">Squad</button>
+        </div>
+        <p class="hint">Quick matches start on their own after the lobby wait (60s). With bots enabled on the server they are filled with bots.</p>
+
+        <h3>Private room</h3>
+        <div class="row">
+            <select id="room-mode">
+                <option value="solo">Solo</option>
+                <option value="duo">Duo</option>
+                <option value="squad">Squad</option>
+            </select>
+            <select id="room-map"></select>
+            <button id="btn-create-room">Create room</button>
+        </div>
+        <div class="row">
+            <input id="room-code" placeholder="Room code (BR-/CS-/TD-XXXXXXXX)">
+            <button id="btn-join-code">Join by code</button>
+        </div>
+
+        <h3>Party</h3>
+        <div class="row">
+            <select id="party-mode">
+                <option value="duo">Duo</option>
+                <option value="squad">Squad</option>
+            </select>
+            <button id="btn-party-create">Create party</button>
+            <input id="party-code" placeholder="Party code (P-XXXXXX)">
+            <button id="btn-party-join">Join party</button>
+            <button id="btn-party-leave" class="small">Leave</button>
+        </div>
+        <div id="party-info" class="muted"></div>
+
+        <p id="lobby-message" class="message"></p>
+    </div>
+</section>
+
+<!-- ============ WAITING ROOM ============ -->
+<section id="screen-waiting" class="screen panel-screen hidden">
+    <div class="panel wide">
+        <h2 id="wait-title">Waiting for players</h2>
+        <p id="wait-code" class="muted"></p>
+        <p id="wait-status" class="big"></p>
+        <ul id="wait-players" class="list"></ul>
+        <div class="row">
+            <button id="btn-start" class="primary hidden">Start match</button>
+            <button id="btn-leave-room">Leave</button>
+        </div>
+        <p id="wait-message" class="message"></p>
+    </div>
+</section>
+
+<!-- ============ GAME ============ -->
+<section id="screen-game" class="screen hidden">
+    <canvas id="canvas"></canvas>
+
+    <div id="hud-top" class="hud">
+        <div id="hud-phase"></div>
+        <div id="hud-zone"></div>
+        <div id="hud-alive"></div>
+    </div>
+
+    <div id="hud-self" class="hud">
+        <div class="bar"><div id="bar-health" class="fill health"></div><span id="txt-health"></span></div>
+        <div class="bar"><div id="bar-armor" class="fill armor"></div><span id="txt-armor"></span></div>
+        <div id="hud-status"></div>
+    </div>
+
+    <div id="hud-weapon" class="hud">
+        <div id="hud-weapons"></div>
+        <div id="hud-ammo"></div>
+        <div id="hud-items"></div>
+    </div>
+
+    <div id="hud-feed" class="hud"></div>
+    <div id="hud-center" class="hud"></div>
+
+    <div id="hud-help" class="hud">
+        <b>WASD</b> move · <b>mouse</b> aim, <b>click</b> fire at the enemy nearest the cursor ·
+        <b>R</b> reload · <b>1-3</b> weapon · <b>F</b> loot (<b>Shift+F</b> swap) ·
+        <b>G</b> frag · <b>T</b> smoke · <b>Y</b> flash · <b>Q</b> gloo wall ·
+        <b>H</b> bandage · <b>J</b> medkit · <b>X</b> cancel · <b>E</b> revive ·
+        <b>Space</b> jump / parachute · <b>wheel</b> zoom
+    </div>
+
+    <div id="hud-dead" class="hud hidden">
+        <h3>You were eliminated</h3>
+        <div id="spectate-list"></div>
+        <button id="btn-back-lobby">Back to lobby</button>
+    </div>
+
+    <div id="hud-results" class="hud hidden">
+        <h2 id="results-title">Match over</h2>
+        <table id="results-table"></table>
+        <div id="results-progress" class="muted"></div>
+        <button id="btn-results-lobby" class="primary">Back to lobby</button>
+    </div>
+</section>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/api.js"></script>
+<script src="js/state.js"></script>
+<script src="js/render.js"></script>
+<script src="js/game.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/modes-ui.js"></script>
+</body>
+</html>
